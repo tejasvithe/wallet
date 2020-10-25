@@ -16,13 +16,13 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @GetMapping(value = "/get-all-transaction")
-    public List<Transaction> getAllTransaction(@RequestHeader("token") String token, @RequestParam("wallet-id") String walletId) {
+    public List<Transaction> getAllTransaction(@RequestParam("wallet-id") String walletId) {
 
         return transactionService.getAllTransaction(walletId);
     }
 
     @PostMapping(value = "/reverse-transaction")
-    public ResponseDto reverseTransaction(@RequestHeader("token") String token, @RequestParam("transaction-id") String transactionId) {
+    public ResponseDto reverseTransaction(@RequestParam("transaction-id") String transactionId) {
 
         return transactionService.reverseTransaction(transactionId);
 

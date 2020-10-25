@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
         Wallet wallet = Wallet.builder().balance(0.0).build();
         walletRepository.save(wallet);
-        User user = User.builder().mobileNumber(userData.getMobileNumber()).firstName(userData.getFirstName()).lastName(userData.getLastName()).password(encryptedPassword).email(userData.getEmail()).pin(userData.getPin()).wallet(wallet).build();
+        User user = User.builder().firstName(userData.getFirstName()).lastName(userData.getLastName()).password(encryptedPassword).email(userData.getEmail()).pin(userData.getPin()).wallet(wallet).build();
 
 
         userRepository.save(user);

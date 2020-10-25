@@ -1,35 +1,62 @@
 package com.novopay.wallet.filter;
 
-import com.novopay.wallet.constants.ApplicationConstants;
-import com.novopay.wallet.exception.InvalidTokenException;
-import com.novopay.wallet.model.LoginToken;
-import com.novopay.wallet.repository.LoginTokenRepository;
+import com.novopay.wallet.repository.UserRepository;
+import com.novopay.wallet.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@Component
-//@Order(1)
-//@WebFilter("/add-money")
-public class TransactionFilter implements Filter {
+
+@Component
+public class TransactionFilter extends OncePerRequestFilter {
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    private LoginTokenRepository loginTokenRepository;
+    private JwtUtil jwtUtil;
+
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+//        HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-        HttpServletRequest req = (HttpServletRequest) servletRequest;
+//        String token = req.getHeader(ApplicationConstants.TOKEN);
 
-        String token = req.getHeader(ApplicationConstants.TOKEN);
+        final String authorizationHeader = httpServletRequest.getHeader("Authorization");
 
-        LoginToken loginToken = loginTokenRepository.findByToken(token);
-        if (loginToken == null) {
-            throw new InvalidTokenException("Invalid Token");
+        String username = null;
+        String jwt = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+            username = jwtUtil.extractUsername(jwt);
         }
 
-        filterChain.doFilter(servletRequest, servletResponse);
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            UserDetails userDetails = userRepository.findByEmail(username);
+
+            if (jwtUtil.validateToken(jwt, userDetails)) {
+
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken
+                        .setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }
+        }
+        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

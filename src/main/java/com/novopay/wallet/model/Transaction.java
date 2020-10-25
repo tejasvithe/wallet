@@ -1,12 +1,9 @@
 package com.novopay.wallet.model;
 
 import com.novopay.wallet.enums.PaymentType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Getter
@@ -14,6 +11,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "transaction")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transaction extends AuditTable {
 
     private Double amount;
@@ -23,7 +22,6 @@ public class Transaction extends AuditTable {
     private String destination;
 
     private PaymentType paymentType;
-
-    @OneToOne
-    private Wallet wallet;
+    
+    private String walletId;
 }

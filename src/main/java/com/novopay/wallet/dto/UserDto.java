@@ -14,4 +14,6 @@ public class UserDto {
     private String password;
 
     private String pin;
+    
+    private String mobileNumber;
 }

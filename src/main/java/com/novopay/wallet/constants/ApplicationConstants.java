@@ -15,4 +15,6 @@ public interface ApplicationConstants {
     Double DEBIT_CARD_CHARGE = 0.2;
 
     Double COMMISSION = 0.05;
+
+    String SECRET_KEY = "jwt-secret-key";
 }
