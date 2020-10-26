@@ -1,7 +1,7 @@
 package com.novopay.wallet.enums;
 
 public enum PaymentType {
-    CREDIT_CARD("Credit Card"), DEBIT_CARD("Debit Card"), CARD_PAYMENT("Card Payment"), WALLET("Wallet");
+    CREDIT_CARD("creditCard"), DEBIT_CARD("debitCard"), CARD_PAYMENT("cardPayment"), WALLET("Wallet");
 
     private final String value;
 

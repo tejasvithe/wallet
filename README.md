@@ -18,5 +18,8 @@ WalletController - using for adding money in wallet and transfer money from one 
 TransactionController - Using for all transaction related work
 
 
+for login use "/sign-in" api  this will return a jwt token, for using other api send this token as header
+
+header name = "Authorization" value = "Bearer jwtToken"
 
 

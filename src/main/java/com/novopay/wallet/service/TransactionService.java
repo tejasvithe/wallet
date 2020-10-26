@@ -9,5 +9,7 @@ public interface TransactionService {
 
     List<Transaction> getAllTransaction(String walletId);
 
+    Transaction getTransaction(String transactionId);
+
     ResponseDto reverseTransaction(String transactionId);
 }

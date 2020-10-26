@@ -1,6 +1,7 @@
 package com.novopay.wallet.model;
 
 import com.novopay.wallet.enums.PaymentType;
+import com.novopay.wallet.enums.Status;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -22,6 +23,8 @@ public class Transaction extends AuditTable {
     private String destination;
 
     private PaymentType paymentType;
-    
+
     private String walletId;
+
+    private Status status;
 }

@@ -21,6 +21,12 @@ public class TransactionController {
         return transactionService.getAllTransaction(walletId);
     }
 
+    @GetMapping(value = "/get-one-transaction")
+    public Transaction getTransaction(@RequestParam("transaction-id") String transactionId) {
+
+        return transactionService.getTransaction(transactionId);
+    }
+
     @PostMapping(value = "/reverse-transaction")
     public ResponseDto reverseTransaction(@RequestParam("transaction-id") String transactionId) {
 
